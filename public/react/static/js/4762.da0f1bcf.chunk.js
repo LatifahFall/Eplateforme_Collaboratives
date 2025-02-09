@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunke_commerce_template=self.webpackChunke_commerce_template||[]).push([[4762],{4762:function(e,a,s){s.r(a);s(2791);var r=s(184);a.default=function(e){return(0,r.jsx)("div",{className:"progress ".concat(e.className),style:{height:1},children:(0,r.jsx)("div",{className:"progress-bar",role:"progressbar",style:{width:"25%"},"aria-valuenow":25,"aria-valuemin":0,"aria-valuemax":100})})}}}]);
+//# sourceMappingURL=4762.da0f1bcf.chunk.js.map
