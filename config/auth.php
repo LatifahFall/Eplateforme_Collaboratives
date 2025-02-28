@@ -40,8 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        //siham zadt hadi
+        'admin' => [ // Add this
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
 
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -71,6 +77,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        //siham zadtha
+        'admins' => [ // Add this
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*

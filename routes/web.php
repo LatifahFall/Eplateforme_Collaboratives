@@ -7,16 +7,17 @@ use App\Http\Controllers\Admin\AdminController;
 
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 
 
-Route::get ('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-    
+Route::get ('/dashbord', function () {
+    return view('dashbord');
+})->middleware(['auth'])->name('dashbord');
+/*   
 //require __DIR__. '/auth.php';
     
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function(){
@@ -24,9 +25,21 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
     Route::match( ['get','post'],'login', 'AdminController@login');
     Route::group( ['middleware'=>['admin' ]], function(){
         // Admin Dashboard Route
-        Route::get('dashboard','AdminController@dashbord');
+        Route::get('dashbord','AdminController@dashbord');
         // Admin logout
         Route::get('logout','AdminController@logout');
     });
 });
+*/
+
+
+// siham: dkchi mbghach ikhdm li flfo9
+Route::match(['get', 'post'], 'admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::get('admin/dashbord', [AdminController::class, 'dashbord'])->middleware('admin')->name('admin.dashbord');
+Route::get('admin/logout', [AdminController::class, 'logout'])->middleware('admin')->name('admin.logout');
+
+
+
+
+
 
