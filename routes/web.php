@@ -44,3 +44,14 @@ Route::post('/admin/check-admin-password', [AdminController::class, 'checkAdminP
     ->name('admin.check-admin-password');
 
 
+//UPDATE ADMIN DETAILS
+    // Vérification du mot de passe de l'admin
+    Route::post('check-admin-password', [AdminController::class, 'checkAdminPassword']);
+
+    // Mise à jour des détails de l'admin
+    Route::match(['get', 'post'], '/admin/update-admin-details', [AdminController::class, 'updateAdminDetails'])->name('admin.updateDetails');
+
+    
+
+    // Déconnexion de l'admin
+   // Route::get('logout', [AdminController::class, 'logout'])

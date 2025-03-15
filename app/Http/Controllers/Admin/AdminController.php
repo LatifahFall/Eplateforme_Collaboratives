@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
-
+//use Intervention\Image\Facades\Image;
+use Image;
 
 class AdminController extends Controller
 {
@@ -26,7 +27,7 @@ class AdminController extends Controller
 
     // Si la requête est GET, afficher la page
     if (!$request->isMethod('post')) {
-        return view('admin.settings.update_admin_password', compact('adminDetails'));
+        return view('admin.settings.update_admin_details', compact('adminDetails'));
     }
 
     // Récupérer les données du formulaire
@@ -50,12 +51,6 @@ class AdminController extends Controller
     return redirect()->back()->with('success_message', 'Password updated successfully!');
 }
 
-    
-    
-    
-    
-    
-
    public function checkAdminPassword(Request $request){
     $data = $request->all();
     /*echo "<pre>"; print_r($data); die;*/
@@ -65,8 +60,71 @@ class AdminController extends Controller
         return "false";
     }
 }
+//oumayma&chaymae
+public function updateAdminDetails(Request $request)
+{
+    if ($request->isMethod('post')) {
+        $data = $request->all();
+        //echo "<pre>";print_r($data) ;die
 
+        $rules = [
+            'admin_name' => 'required|regex:/^[\pL\s\-]+$/u',
+            'admin_mobile' => 'required|numeric'
+        ];
+        
+        $customMessages = [
+            'admin_name.required' => 'Name is required',
+            'admin_name.regex' => 'Valid Name is required',
+            'admin_mobile.required' => 'Mobile is required',
+            'admin_mobile.numeric' => 'Valid Mobile is required',
+        ];
+        
+        $this->validate($request, $rules, $customMessages);
 
+        $admin = Admin::where('id', Auth::guard('admin')->user()->id)->first();
+        $imageName = $admin->image;
+    
+        // Vérifier si un fichier a été uploadé
+        if ($request->hasFile('admin_image')) {
+            $image_tmp = $request->file('admin_image');
+    
+            if ($image_tmp->isValid()) {
+                // Récupérer l'extension
+                $extension = $image_tmp->getClientOriginalExtension();
+    
+                // Générer un nom unique
+                $imageName = rand(111, 99999) . '.' . $extension;
+    
+                // Définir le chemin de sauvegarde
+                $imagePath = public_path('admin/images/photos' . $imageName);
+    
+                // Sauvegarder l'image avec Intervention Image
+                Image::make($image_tmp)->save($imagePath);
+    
+                // Mettre à jour l'image dans la base de données
+                $admin->image = $imageName;
+                $admin->save();
+            
+         }}
+          else if(!empty($data['current_admin_image'])){
+            $imageName=$data['current_admin_image'];
+          }else{
+            $imageName=" ";
+          }
+
+        // Update admin details
+        Admin::where('id', Auth::guard('admin')->user()->id)->update([
+            'name' => $data['admin_name'],
+            'mobile' => $data['admin_mobile'],
+            'image' => $imageName
+        ]);
+
+        return redirect()->back()->with('success_message', 'Admin details updated successfully!');
+    }
+
+    return view('admin.settings.update_admin_details');
+}
+//login
     public function login(Request $request){
         if ($request->isMethod('post')){
             // Super secure password: 123 and username=admin@admin.com
@@ -99,7 +157,7 @@ class AdminController extends Controller
     }
 
 }
-
+ 
 /*namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
